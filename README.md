@@ -9,3 +9,4 @@ Este project de Spring Boot con JPA y MySQL/MongoDB está diseñado para ser una
 # Como lo instalo
 
 # integrantes
+- Heydi
