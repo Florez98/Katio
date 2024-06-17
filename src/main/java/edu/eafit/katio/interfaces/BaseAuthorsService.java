@@ -4,7 +4,7 @@ import java.util.List;
 
 import edu.eafit.katio.models.Authors;
 
-public interface BaseAuthorService {
+public interface BaseAuthorsService {
      List<Authors> getAuthorById(Integer id);
      List<Authors> getAuthorByName(String name);
      List<Authors> getAuthorByCountry(String country);

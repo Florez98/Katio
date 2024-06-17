@@ -1,5 +1,6 @@
 package edu.eafit.katio.Controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,32 +34,32 @@ public class AuthorsController {
 
     // Traer todos
     @GetMapping("/getall")
-    public ResponseEntity<Iterable<Authors>> getAllAuthors() {
-        var authors = _authorRepository.findAll();
-        return new ResponseEntity<Iterable<Authors>>(authors, HttpStatus.OK);
+    public ResponseEntity<List<Authors>> getAllAuthors() {
+        List<Authors> authors = new ArrayList<>();
+        _authorRepository.findAll().forEach(authors::add);
+        return new ResponseEntity<>(authors, HttpStatus.OK);
     }
-    
+
+
     // Buscar por id
     @GetMapping("/getById")
-    public ResponseEntity<Iterable<Authors>> getAuthorById(@RequestParam("id") Integer id)
-    {
-        var authorById = new AuthorsService(_authorsRepository).getAuthorById(id);
-        return new ResponseEntity<Iterable<Authors>>(authorById, HttpStatus.OK);
+    public ResponseEntity<List<Authors>> getAuthorById(@RequestParam("id") Integer id) {
+        List<Authors> authorById = new AuthorsService(_authorRepository).getAuthorById(id);
+        return ResponseEntity.ok(authorById);
     }
 
     // Buscar por nombre
     @GetMapping("/getByName")
-    public ResponseEntity<Iterable<Authors>> getAuthorByName(@RequestParam("name") String name)
-    {
-        var authorByName = new AuthorsService(_authorsRepository).getAuthorByName(name);
-        return new ResponseEntity<Iterable<Authors>>(authorByName, HttpStatus.OK);
+    public ResponseEntity<List<Authors>> getAuthorByName(@RequestParam("name") String name) {
+        List<Authors> authorByName = new AuthorsService(_authorRepository).getAuthorByName(name);
+        return ResponseEntity.ok(authorByName);
     }
 
     // Buscar por pais
     @GetMapping("/getByCountry")
-    public ResponseEntity<Iterable<Authors>> getAuthorByCountry(@RequestParam("country") String country) {
-        var authorByCountry = new AuthorsService(_authorsRepository).getAuthorByCountry(country);
-        return new ResponseEntity<Iterable<Authors>>(authorByCountry, HttpStatus.OK);
+    public ResponseEntity<List<Authors>> getAuthorByCountry(@RequestParam("country") String country) {
+        List<Authors> authorByCountry = new AuthorsService(_authorRepository).getAuthorByCountry(country);
+        return ResponseEntity.ok(authorByCountry);
     }
 
     // Traer Autores por rango de fecha de nacimiento
@@ -66,7 +67,7 @@ public class AuthorsController {
     public ResponseEntity<List<Authors>> getAuthorsByDate(
         @PathVariable("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
         @PathVariable("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
-        var response = new AuthorsService(_authorsRepository).getAuthorsByDateRange(startDate, endDate);
+        var response = new AuthorsService(_authorRepository).getAuthorsByDateRange(startDate, endDate);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -74,7 +75,7 @@ public class AuthorsController {
     @PostMapping("/add")
     public ResponseEntity<Authors> addAuthors(@RequestBody Authors authors) {
         try {
-            Authors createAuthor = new AuthorsService(_authorsRepository) .addAuthors(authors);
+            Authors createAuthor = new AuthorsService(_authorRepository) .addAuthors(authors);
             return new ResponseEntity<>(createAuthor, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -84,7 +85,7 @@ public class AuthorsController {
     // Editar autor
     @PutMapping("/update/{name}")
     public ResponseEntity<Object> updateAuthors(@PathVariable("name") String name, @RequestBody Authors updateAuthors) {
-        Authors updatedAuthors = new AuthorsService(_authorsRepository) .updateAuthor(name, updateAuthors);
+        Authors updatedAuthors = new AuthorsService(_authorRepository) .updateAuthor(name, updateAuthors);
         if (updatedAuthors != null) {
             return new ResponseEntity<>(updatedAuthors, HttpStatus.OK);
         } else {
